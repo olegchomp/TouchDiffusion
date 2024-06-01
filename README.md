@@ -1,7 +1,7 @@
 # TouchDiffusion
 <a href="https://discord.com/invite/wNW8xkEjrf"><img src="https://discord.com/api/guilds/838923088997122100/widget.png?style=shield" alt="Discord Shield"/></a>
 
-TouchDesigner implementation  for real-time Stable Diffusion interactive generation with [StreamDiffusion](https://pages.github.com/](https://github.com/cumulo-autumn/StreamDiffusion)https://github.com/cumulo-autumn/StreamDiffusion).
+TouchDesigner implementation (up to 2X FPS increase) for real-time Stable Diffusion interactive generation with [StreamDiffusion](https://pages.github.com/](https://github.com/cumulo-autumn/StreamDiffusion)https://github.com/cumulo-autumn/StreamDiffusion).
 
 ## Disclaimer
 **Notice:** This repository is in an early testing phase and may undergo significant changes. Use it at your own risk. 
