@@ -24,7 +24,7 @@ On first run it will create .venv and install dependencies
 Models must be in ```models``` folder or you can set [HF_HOME](https://huggingface.co/docs/huggingface_hub/en/package_reference/environment_variables) in system variables to change this folder.
 
 1) Run ```webui.bat```
-2) Select model or provide model name (will be downloaded if not exists)
+2) Select model or provide model name (will be downloaded if not exists). for ex. `stabilityai/sd-turbo`
 4) Set amount of sampling steps (Batch size)
 5) Select Turbo (if model is Turbo), LCM (Add LCM Lora), None (for other types)
 6) Click submit and wait for acceleration to finish
