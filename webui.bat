@@ -8,7 +8,8 @@ if %errorlevel% neq 0 (
     echo Git is not installed or not found in the system PATH.
     pause
     exit /b 1
-) 
+) else (
+    echo Git is installed.
 
 if not exist .venv (
     echo Creating .venv directory...
