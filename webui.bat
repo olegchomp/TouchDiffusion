@@ -10,6 +10,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 ) else (
     echo Git is installed.
+)
 
 if not exist .venv (
     echo Creating .venv directory...
