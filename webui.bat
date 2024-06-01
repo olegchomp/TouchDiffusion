@@ -93,6 +93,13 @@ if not exist .venv (
 
     cd StreamDiffusion
 
+    echo Installing dependencies...
+    pip install -r requirements.txt|| (
+        echo Failed to install dependencies.
+        pause
+        exit /b 1
+    )
+
     python setup.py develop easy_install streamdiffusion[tensorrt] || (
         echo Failed to run setup.py and install streamdiffusion.
         pause
@@ -105,6 +112,8 @@ if not exist .venv (
         exit /b 1
     )
 
+    pip uninstall -y nvidia-cudnn-cu11
+    
     echo Installation complete.
 
 ) else (
