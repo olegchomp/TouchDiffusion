@@ -1,6 +1,6 @@
 from TDStoreTools import StorageManager
 import TDFunctions as TDF
-
+from utils.wrapper import StreamDiffusionWrapper
 import numpy as np
 import torch
 import os 
@@ -12,7 +12,6 @@ class TouchDiffusionExt:
 	DefaultExt description
 	"""
 	def __init__(self, ownerComp):
-		from utils.wrapper import StreamDiffusionWrapper
 		self.ownerComp = ownerComp
 
 		self.source = op('null1')
