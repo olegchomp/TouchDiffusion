@@ -1,0 +1,2 @@
+cd StreamDiffusion
+git pull
