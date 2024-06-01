@@ -15,7 +15,7 @@ Required TouchDesigner 2023 & Python 3.11
 1. Install [Python 3.11](https://www.python.org/downloads/release/python-3118/)
 2. Install [Git](https://git-scm.com/downloads)
 3. Install [CUDA Toolkit](https://developer.nvidia.com/cuda-11-8-0-download-archive) 11.8
-4. Download latest release
+4. Download [latest release](https://github.com/olegchomp/TouchDiffusion/releases)
 5. Run ```webui.bat```
 
 On first run it will create .venv and install dependencies 
