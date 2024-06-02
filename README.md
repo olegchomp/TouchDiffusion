@@ -34,7 +34,7 @@ Models must be in ```models``` folder or you can set [HF_HOME](https://huggingfa
 1. Add **TouchDiffusion.tox** to project
 2. On ```Settings``` page change path to ```TouchDiffusion``` folder (same as where webui.bat) and click **Re-init**. (restart project if get errors)
 3. On ```Settings``` page select Engine, Acceleration, Batch size (values locked to avaliable for engines) and click **Load Engine**.
-4. Connect animated TOP to input. Component upfates only if input updates. 
+4. Connect animated TOP to input. Component cook only if input updates. 
 
 #### Known issues / Roadmap:
 * Fix Re-init. Sometimes required to restart TouchDesigner for initializing site-packages.
