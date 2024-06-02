@@ -3,6 +3,15 @@
 
 TouchDesigner implementation for real-time Stable Diffusion interactive generation with [StreamDiffusion](https://pages.github.com/](https://github.com/cumulo-autumn/StreamDiffusion)https://github.com/cumulo-autumn/StreamDiffusion).
 
+**Benchmarks with stabilityai/sd-turbo and 1 batch size.**
+
+| GPU | FPS |
+| --- | --- |
+| 4090 | 55-60 FPS |
+| 3090ti | 40 FPS |
+| 3090 | 30-32 FPS |
+| 4070 Laptop | 24 FPS |
+
 ## Disclaimer
 **Notice:** This repository is in an early testing phase and may undergo significant changes. Use it at your own risk. 
 
