@@ -1,6 +1,6 @@
 @echo off
 
-set PYTHON_PATH=
+set PYTHON_PATH=C:\Users\Oleg\AppData\Local\Programs\Python\Python311\python.exe
 
 REM Check if Git is installed
 where git > nul 2>&1
@@ -35,22 +35,12 @@ if not exist .venv (
     )
 
     echo Installing dependencies...
-    pip install torch==2.1.0 torchvision==0.16.0 --index-url https://download.pytorch.org/whl/cu118 || (
-        echo Failed to install torch and torchvision.
+    pip install gradio || (
+        echo Failed to install gradio.
         pause
         exit /b 1
     )
-
-    if not exist engines (
-        echo Creating 'engines' folder...
-        mkdir engines
-    )
-
-    if not exist models (
-        echo Creating 'models' folder...
-        mkdir models
-    )
-
+    
     if not exist StreamDiffusion (
         echo Downloading StreamDiffusion...
         git clone https://github.com/olegchomp/StreamDiffusion || (
@@ -59,29 +49,6 @@ if not exist .venv (
             exit /b 1
         )
     )
-
-    cd StreamDiffusion
-
-    echo Installing dependencies...
-    pip install -r requirements.txt|| (
-        echo Failed to install dependencies.
-        pause
-        exit /b 1
-    )
-
-    python setup.py develop easy_install streamdiffusion[tensorrt] || (
-        echo Failed to run setup.py and install streamdiffusion.
-        pause
-        exit /b 1
-    )
-
-    python -m streamdiffusion.tools.install-tensorrt || (
-        echo Failed to install TensorRT.
-        pause
-        exit /b 1
-    )
-
-    pip uninstall -y nvidia-cudnn-cu11
     
     echo Installation complete.
 
