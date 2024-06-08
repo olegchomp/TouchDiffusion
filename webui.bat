@@ -1,6 +1,6 @@
 @echo off
 
-set PYTHON_PATH=C:\Users\Oleg\AppData\Local\Programs\Python\Python311\python.exe
+set PYTHON_PATH=
 
 REM Check if Git is installed
 where git > nul 2>&1
