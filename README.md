@@ -16,8 +16,6 @@ TouchDesigner implementation for real-time Stable Diffusion interactive generati
 ## Disclaimer
 **Notice:** This repository is in an early testing phase and may undergo significant changes. Use it at your own risk. 
 
-**Use #touchdiffusion forum in [discord](https://discord.com/invite/wNW8xkEjrf) for submiting issues.**
-
 ## Usage
 Required TouchDesigner 2023 & Python 3.11
 
