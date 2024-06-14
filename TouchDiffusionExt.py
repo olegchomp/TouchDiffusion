@@ -1,11 +1,20 @@
 from TDStoreTools import StorageManager
 import TDFunctions as TDF
-from utils.wrapper import StreamDiffusionWrapper
 import numpy as np
 import torch
 import os 
 import webbrowser
 import json
+from datetime import datetime
+import webbrowser
+
+try:
+	from StreamDiffusion.utils.wrapper import StreamDiffusionWrapper
+except Exception as e:
+	current_time = datetime.now()
+	formated_time = current_time.strftime("%H:%M:%S")
+	op('fifo1').appendRow([formated_time, 'Error', e])
+
 
 class TouchDiffusionExt:
 	"""
@@ -18,39 +27,52 @@ class TouchDiffusionExt:
 		self.device = "cuda"
 		self.to_tensor = TopArrayInterface(self.source)
 		self.stream_toparray = torch.cuda.current_stream(device=self.device)
-		self.rgba_tensor = torch.zeros((512, 512, 4), dtype=torch.float32).to(self.device)
-		self.rgba_tensor[..., 3] = 1
-		self.output_interface = TopCUDAInterface(512,512,4,np.float32)
+		self.rgba_tensor = torch.zeros((512, 512, 4), dtype=torch.float32).to(self.device) #512,768
+		self.rgba_tensor[..., 3] = 0
+		self.output_interface = TopCUDAInterface(512,512,4,np.float32) #768,512
 		self.stream = None
 
-	def activate_stream(self, turbo, lcm):
-		_t_index_list = self.generate_t_index_list()
-		self.stream = StreamDiffusionWrapper(
-			model_id_or_path=self.ownerComp.par.Enginelist.val,
-			lora_dict=None,
-			t_index_list=_t_index_list,
-			frame_buffer_size=1,
-			width=512,
-			height=512,
-			warmup=0,
-			acceleration="tensorrt",
-			mode="img2img",
-			use_denoising_batch=True,
-			cfg_type="none",
-			seed=self.ownerComp.par.Seed.val,
-			use_lcm_lora=lcm,
-			output_type='pt',
-			touchdiffusion=True,
-			turbo=turbo
-		)
+	def activate_stream(self):
+		self.update_size()
 
-		self.stream.prepare(
-			prompt = self.ownerComp.par.Prompt.val,
-			negative_prompt = self.ownerComp.par.Negprompt.val,
-			guidance_scale=self.ownerComp.par.Cfgscale.val,
-			delta=self.ownerComp.par.Deltamult.val,
-			t_index_list=self.update_denoising_strength()
-		)
+		acceleration_lora = op('parameter1')['Accelerationlora',1].val
+		if acceleration_lora == 'LCM':
+			use_lcm_lora = True
+		else:
+			use_lcm_lora = False
+		
+		try:
+			self.stream = StreamDiffusionWrapper(
+				model_id_or_path=f"{op('parameter1')['Checkpoint',1].val}",
+				lora_dict=op('parameter1')['Loralist',1].val,
+				t_index_list=self.generate_t_index_list(),
+				frame_buffer_size=1,
+				width= int(op('parameter1')['Sizex',1]),
+				height=int(op('parameter1')['Sizey',1]),
+				warmup=0,
+				acceleration="tensorrt",
+				mode= op('parameter1')['Checkpointmode',1].val,
+				use_denoising_batch=True,
+				cfg_type="self",
+				seed=int(op('parameter1')['Seed',1]),
+				use_lcm_lora=use_lcm_lora,
+				output_type='pt',
+				model_type=op('parameter1')['Checkpointtype',1].val,
+				touchdiffusion=True,
+				#turbo=False
+			)
+
+			self.stream.prepare(
+				prompt = parent().par.Prompt.val,
+				negative_prompt = parent().par.Negprompt.val,
+				guidance_scale=parent().par.Cfgscale.val,
+				delta=parent().par.Deltamult.val,
+				t_index_list=self.update_denoising_strength()
+			)
+
+			self.fifolog('Status', 'Engine activated')
+		except Exception as e:
+			self.fifolog('Error', e)
 	
 	def generate(self, scriptOp):
 		stream = self.stream
@@ -69,7 +91,16 @@ class TouchDiffusionExt:
 				self.output_interface.size,  
 				self.output_interface.mem_shape)
 	
-	def preprocess_image(self,image):
+	def update_size(self):
+		width = int(op('parameter1')['Sizex',1])
+		height = int(op('parameter1')['Sizey',1])
+		print(width,height)
+		self.rgba_tensor = torch.zeros((height, width, 4), dtype=torch.float32).to(self.device)
+		self.rgba_tensor[..., 3] = 0
+		self.output_interface = TopCUDAInterface(width,height,4,np.float32)
+
+	
+	def preprocess_image(self, image):
 		image = torch.flip(image, [1])
 		image = torch.clamp(image, 0, 1)
 		image = image[:3, :, :] 
@@ -89,7 +120,7 @@ class TouchDiffusionExt:
 	def acceleration_mode(self):
 		turbo = False
 		lcm = False
-		acceleration_mode = self.ownerComp.par.Acceleration.val 
+		acceleration_mode = parent().par.Acceleration.val 
 		if acceleration_mode == 'LCM':
 			lcm = True
 		if acceleration_mode == 'sd_turbo':
@@ -99,43 +130,48 @@ class TouchDiffusionExt:
 
 
 	def update_engines(self):
-		op('table1').clear()
-		engines_dir = f'{self.ownerComp.par.Venvpath.val}/engines'
-		engine_folders = [os.path.join(engines_dir, folder) for folder in os.listdir(engines_dir) if os.path.isdir(os.path.join(engines_dir, folder))]
-		if len(engine_folders) > 0:
-			parsed_folders = []
-			for engine_folder in engine_folders:
-				children_folders = [os.path.join(engine_folder, child) for child in os.listdir(engine_folder) if os.path.isdir(os.path.join(engine_folder, child))]
-				for child_folder in children_folders:
-					parsed_folders.append(self.parse_folder(os.path.relpath(child_folder, engines_dir)))
-
-		else:
-			op('table1').appendRow([None, None, None])
+		menuNames = []
+		menuLabels = []
+		for root, dirs, files in os.walk('engines'):
+			if 'unet.engine' in files:
+				folder_name = os.path.basename(root)
+				split_folder_name = folder_name.split('--')
+				if len(split_folder_name) >= 10:
+					name = [split_folder_name[0], 
+						split_folder_name[2], 
+						split_folder_name[3],
+						split_folder_name[5]]
+					name = '-'.join(name)
+					menuLabels.append(name)
+					menuNames.append(folder_name)
+		
+		parent().par.Enginelist.menuNames = menuNames
+		parent().par.Enginelist.menuLabels = menuLabels
+		self.update_selected_engine()
 	
-	def parse_folder(self, folder_path):
-		components = folder_path.split('--')
-		engine_name = components[0].replace('\\', '/')
-		lcm_lora = components[1].split('-')[1]
-		max_batch = components[4].split('-')[1]
+	def update_selected_engine(self):
+		vals = parent().par.Enginelist.val.split('--')
+		parent().par.Checkpoint = vals[0]
+		parent().par.Checkpointtype = vals[1]
+		parent().par.Accelerationlora = vals[4]
+		parent().par.Checkpointmode = vals[7]
+		parent().par.Controlnet = vals[9]
+		parent().par.Loralist = vals[8]
+		parent().par.Sizex = vals[2]
+		parent().par.Sizey = vals[3]
+		parent().par.Batchsizex = vals[5]
+		parent().par.Batchsizey = vals[6]
 
-		# Create dictionary
-		folder_dict = {
-			'engine_name': engine_name,
-			'lcm_lora': lcm_lora,
-			'max_batch': max_batch,
-			'engine_path': folder_path
-		}
-		op('table1').appendRow([engine_name, lcm_lora, max_batch, folder_path])
-		return folder_dict
+
 
 	def update_prompt(self):
-		prompt = self.ownerComp.par.Prompt.val
+		prompt = parent().par.Prompt.val
 		self.stream.touchdiffusion_prompt(prompt)
 	
 	def prompt_to_str(self):
 		prompt_list = []
-		seq = self.ownerComp.seq.Promptblock
-		enable_weights = self.ownerComp.par.Enableweight
+		seq = parent().seq.Promptblock
+		enable_weights = parent().par.Enableweight
 		for block in seq.blocks:
 			if block.par.Weight.val > 0:
 				if enable_weights:
@@ -150,32 +186,33 @@ class TouchDiffusionExt:
 
 	def update_scheduler(self):
 		t_index_list = []
-		seq = self.ownerComp.seq.Schedulerblock
+		seq = parent().seq.Schedulerblock
 		for block in seq.blocks:
 			t_index_list.append(block.par.Step)
 		self.stream.touchdiffusion_scheduler(t_index_list)
 	
 	def update_denoising_strength(self):
-		amount = self.ownerComp.par.Denoise
-		mode = self.ownerComp.par.Denoisemode
+		amount = parent().par.Denoise
+		mode = parent().par.Denoisemode
 		#self.stream.touchdiffusion_generate_t_index_list(amount, mode)
 		t_index_list = self.stream.touchdiffusion_generate_t_index_list(amount, mode)
 		return t_index_list
 
 	def generate_t_index_list(self):
+		batchsize = op('parameter1')['Batchsizex',1]
 		t_index_list = []
-		for i in range(int(self.ownerComp.par.Batchsize.val)):
+		for i in range(int(batchsize)):
 			t_index_list.append(i)
 		return t_index_list
 
 
 	def update_cfg_setting(self):
-		guidance_scale = self.ownerComp.par.Cfgscale
-		delta = self.ownerComp.par.Deltamult.val
+		guidance_scale = parent().par.Cfgscale
+		delta = parent().par.Deltamult.val
 		self.stream.touchdiffusion_update_cfg_setting(guidance_scale=guidance_scale, delta=delta)
 
 	def update_noise(self):
-		seed = self.ownerComp.par.Seed.val
+		seed = parent().par.Seed.val
 		self.stream.touchdiffusion_update_noise(seed=seed)
 
 	
@@ -192,12 +229,16 @@ class TouchDiffusionExt:
 	
 	def parexec_onPulse(self, par):
 		if par.name == 'Loadengine':
-			lcm, turbo = self.acceleration_mode()
-			self.activate_stream(turbo, lcm)
+			self.activate_stream()
 		elif par.name == 'Refreshenginelist':
 			self.update_engines()
 		if par.name[0:3] == 'Url':
 			self.about(par.name)
+	
+	def fifolog(self, status, message):
+		current_time = datetime.now()
+		formated_time = current_time.strftime("%H:%M:%S")
+		op('fifo1').appendRow([formated_time, status, message])
 	
 	def about(self, endpoint):
 		if endpoint == 'Urlg':
@@ -210,24 +251,6 @@ class TouchDiffusionExt:
 			webbrowser.open('https://olegcho.mp/', new=2)
 		if endpoint == 'Urldonate':
 			webbrowser.open('https://boosty.to/vjschool/donate', new=2)
-
-	def version(self):
-		url = 'https://api.github.com/repos/olegchomp/TDComfyUI/releases/latest'
-		try:
-			def callback(statusCode, headerDict, data, id):
-
-				if statusCode['code'] == 200:
-					gitversion = json.loads(data)['name'].split('v.')[1]
-					if gitversion == self.tdcomfy.par.Version:
-						self.history("Status: Component version up to date")
-					else:
-						self.history("Status: New version available on Github!")
-				else:
-					self.history("Status: Component version not checked")
-
-			op.TDResources.WebClient.Request(callback, url, "GET")
-		except:
-			self.history("Status: Component version not checked")
 
 class TopCUDAInterface:
 	def __init__(self, width, height, num_comps, dtype):
