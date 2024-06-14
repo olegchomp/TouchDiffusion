@@ -150,17 +150,22 @@ class TouchDiffusionExt:
 		self.update_selected_engine()
 	
 	def update_selected_engine(self):
-		vals = parent().par.Enginelist.val.split('--')
-		parent().par.Checkpoint = vals[0]
-		parent().par.Checkpointtype = vals[1]
-		parent().par.Accelerationlora = vals[4]
-		parent().par.Checkpointmode = vals[7]
-		parent().par.Controlnet = vals[9]
-		parent().par.Loralist = vals[8]
-		parent().par.Sizex = vals[2]
-		parent().par.Sizey = vals[3]
-		parent().par.Batchsizex = vals[5]
-		parent().par.Batchsizey = vals[6]
+		try:
+			vals = parent().par.Enginelist.val.split('--')
+			parent().par.Checkpoint = vals[0]
+			parent().par.Checkpointtype = vals[1]
+			parent().par.Accelerationlora = vals[4]
+			parent().par.Checkpointmode = vals[7]
+			parent().par.Controlnet = vals[9]
+			parent().par.Loralist = vals[8]
+			parent().par.Sizex = vals[2]
+			parent().par.Sizey = vals[3]
+			parent().par.Batchsizex = vals[5]
+			parent().par.Batchsizey = vals[6]
+		except:
+			parent().par.Checkpoint, parent().par.Checkpointtype, parent().par.Accelerationlora = '', '', ''
+			parent().par.Checkpointmode, parent().par.Controlnet, parent().par.Loralist = '', '', ''
+			parent().par.Sizex, parent().par.Sizey, parent().par.Batchsizex, parent().par.Batchsizey = 0,0,0,0
 
 
 
@@ -250,7 +255,7 @@ class TouchDiffusionExt:
 		if endpoint == 'Urla':
 			webbrowser.open('https://olegcho.mp/', new=2)
 		if endpoint == 'Urldonate':
-			webbrowser.open('https://boosty.to/vjschool/donate', new=2)
+			webbrowser.open('https://boosty.to/vjschool/', new=2)
 
 class TopCUDAInterface:
 	def __init__(self, width, height, num_comps, dtype):
