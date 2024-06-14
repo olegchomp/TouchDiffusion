@@ -52,6 +52,15 @@ if not exist .venv (
     
     echo Installation complete.
 
+    cd StreamDiffusion
+    
+    echo Launching WebUI...
+    python webui.py || (
+        echo No launch file found
+        pause
+        exit /b 1
+    )
+
 ) else (
     echo Activating virtual environment...
     call .venv\Scripts\activate.bat || (
