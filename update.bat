@@ -1,2 +1,0 @@
-cd StreamDiffusion
-git pull
