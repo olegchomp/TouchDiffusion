@@ -132,7 +132,8 @@ class TouchDiffusionExt:
 	def update_engines(self):
 		menuNames = []
 		menuLabels = []
-		for root, dirs, files in os.walk('engines'):
+		folder = op('parameter1')['Venvpath',1]
+		for root, dirs, files in os.walk(f'{folder}/engines'):
 			if 'unet.engine' in files:
 				folder_name = os.path.basename(root)
 				split_folder_name = folder_name.split('--')
@@ -162,7 +163,8 @@ class TouchDiffusionExt:
 			parent().par.Sizey = vals[3]
 			parent().par.Batchsizex = vals[5]
 			parent().par.Batchsizey = vals[6]
-		except:
+		except Exception as e:
+			print(e)
 			parent().par.Checkpoint, parent().par.Checkpointtype, parent().par.Accelerationlora = '', '', ''
 			parent().par.Checkpointmode, parent().par.Controlnet, parent().par.Loralist = '', '', ''
 			parent().par.Sizex, parent().par.Sizey, parent().par.Batchsizex, parent().par.Batchsizey = 0,0,0,0
