@@ -31,12 +31,13 @@ Required TouchDesigner 2023 & Python 3.11
 9. Restart webui.bat
 
 #### Accelerate model:
-Models in ```.safetensors``` format must be in ```models\checkpoints``` folder.
+Models in ```.safetensors``` format must be in ```models\checkpoints``` folder. (as for sd_turbo, it  will be auto-downloaded)
 
 1) Run ```webui.bat```
-2) Select model.
+2) Select model type. 
+3) Select model.
 4) Set width, height and amount of sampling steps (Batch size)
-5) Select acceleration lora.
+5) Select acceleration lora if available.
 6) Run ```Make engine``` and wait for acceleration to finish. (could take ~10 minutes, depending on your hardware)
 
 #### TouchDesigner inference:
