@@ -31,8 +31,9 @@ Required TouchDesigner 2023 & Python 3.11
 9. Restart webui.bat
 
 #### Accelerate model:
-Models in ```.safetensors``` format must be in ```models\checkpoints``` folder. (as for sd_turbo, it  will be auto-downloaded)
-Internet connection required, while making engines.
+Models in ```.safetensors``` format must be in ```models\checkpoints``` folder. (as for sd_turbo, it  will be auto-downloaded).
+
+**Internet connection required, while making engines.**
 
 1) Run ```webui.bat```
 2) Select model type. 
