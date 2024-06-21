@@ -12,6 +12,7 @@ TouchDesigner implementation for real-time Stable Diffusion interactive generati
 | 3090ti | 37 FPS |
 | 3090 | 30-32 FPS |
 | 4070 Laptop | 24 FPS |
+| 3060 12GB | 16 FPS |
 
 ## Disclaimer
 **Notice:** This repository is in an early testing phase and may undergo significant changes. Use it at your own risk. 
