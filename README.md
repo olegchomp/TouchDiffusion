@@ -20,6 +20,8 @@ TouchDesigner implementation for real-time Stable Diffusion interactive generati
 ## Usage
 Required TouchDesigner 2023 & Python 3.11
 
+You can follow [YouTube tutorial](https://youtu.be/3WqUrWfCX1A)
+
 #### Install:
 1. Install [Python 3.11](https://www.python.org/downloads/release/python-3118/)
 2. Install [Git](https://git-scm.com/downloads)
