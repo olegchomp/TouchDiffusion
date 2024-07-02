@@ -15,6 +15,7 @@ except Exception as e:
 	formated_time = current_time.strftime("%H:%M:%S")
 	op('fifo1').appendRow([formated_time, 'Error', e])
 
+
 class TouchDiffusionExt:
 	"""
 	DefaultExt description
@@ -37,8 +38,11 @@ class TouchDiffusionExt:
 		acceleration_lora = op('parameter1')['Accelerationlora',1].val
 		if acceleration_lora == 'LCM':
 			use_lcm_lora = True
+		elif acceleration_lora == 'HyperSD':
+			use_hyper_lora = True
 		else:
 			use_lcm_lora = False
+			use_hyper_lora = False
 		
 		try:
 			self.stream = StreamDiffusionWrapper(
@@ -55,6 +59,7 @@ class TouchDiffusionExt:
 				cfg_type="self",
 				seed=int(op('parameter1')['Seed',1]),
 				use_lcm_lora=use_lcm_lora,
+				use_hyper_lora=use_hyper_lora,
 				output_type='pt',
 				model_type=op('parameter1')['Checkpointtype',1].val,
 				touchdiffusion=True,
@@ -62,20 +67,15 @@ class TouchDiffusionExt:
 			)
 
 			self.stream.prepare(
-				prompt = parent().par.Prompt.eval(),
-				negative_prompt = parent().par.Negprompt.eval(),
-				guidance_scale=parent().par.Cfgscale.eval(),
-				delta=parent().par.Deltamult.eval(),
+				prompt = parent().par.Prompt.val,
+				negative_prompt = parent().par.Negprompt.val,
+				guidance_scale=parent().par.Cfgscale.val,
+				delta=parent().par.Deltamult.val,
 				t_index_list=self.update_denoising_strength()
 			)
 
-			
-			menuindex = parent().par.Enginelist.menuIndex
-			menulabel = parent().par.Enginelist.menuLabels[menuindex]
-			parent().par.Activeengine = menulabel
 			self.fifolog('Status', 'Engine activated')
 		except Exception as e:
-			parent().par.Activeengine = 'None'
 			self.fifolog('Error', e)
 	
 	def generate(self, scriptOp):
@@ -108,9 +108,9 @@ class TouchDiffusionExt:
 		image = torch.flip(image, [1])
 		image = torch.clamp(image, 0, 1)
 		image = image[:3, :, :] 
-		#_, h, w = image.shape
+		_, h, w = image.shape
 		# Resize to integer multiple of 32
-		#h, w = map(lambda x: x - x % 32, (h, w))
+		h, w = map(lambda x: x - x % 32, (h, w))
 		#image = self.blend_tensors(self.prev_frame, image, 0.5)
 		image = image.unsqueeze(0)
 		return image
@@ -136,8 +136,7 @@ class TouchDiffusionExt:
 	def update_engines(self):
 		menuNames = []
 		menuLabels = []
-		folder = op('parameter1')['Venvpath',1]
-		for root, dirs, files in os.walk(f'{folder}/engines'):
+		for root, dirs, files in os.walk('engines'):
 			if 'unet.engine' in files:
 				folder_name = os.path.basename(root)
 				split_folder_name = folder_name.split('--')
@@ -167,8 +166,7 @@ class TouchDiffusionExt:
 			parent().par.Sizey = vals[3]
 			parent().par.Batchsizex = vals[5]
 			parent().par.Batchsizey = vals[6]
-		except Exception as e:
-			print(e)
+		except:
 			parent().par.Checkpoint, parent().par.Checkpointtype, parent().par.Accelerationlora = '', '', ''
 			parent().par.Checkpointmode, parent().par.Controlnet, parent().par.Loralist = '', '', ''
 			parent().par.Sizex, parent().par.Sizey, parent().par.Batchsizex, parent().par.Batchsizey = 0,0,0,0
@@ -176,8 +174,7 @@ class TouchDiffusionExt:
 
 
 	def update_prompt(self):
-		prompt = parent().par.Prompt.eval()
-		print(prompt)
+		prompt = parent().par.Prompt.val
 		self.stream.touchdiffusion_prompt(prompt)
 	
 	def prompt_to_str(self):
@@ -204,8 +201,8 @@ class TouchDiffusionExt:
 		self.stream.touchdiffusion_scheduler(t_index_list)
 	
 	def update_denoising_strength(self):
-		amount = parent().par.Denoise.eval()
-		mode = parent().par.Denoisemode.eval()
+		amount = parent().par.Denoise
+		mode = parent().par.Denoisemode
 		#self.stream.touchdiffusion_generate_t_index_list(amount, mode)
 		t_index_list = self.stream.touchdiffusion_generate_t_index_list(amount, mode)
 		return t_index_list
@@ -219,12 +216,12 @@ class TouchDiffusionExt:
 
 
 	def update_cfg_setting(self):
-		guidance_scale = parent().par.Cfgscale.eval()
-		delta = parent().par.Deltamult.eval()
+		guidance_scale = parent().par.Cfgscale
+		delta = parent().par.Deltamult.val
 		self.stream.touchdiffusion_update_cfg_setting(guidance_scale=guidance_scale, delta=delta)
 
 	def update_noise(self):
-		seed = parent().par.Seed.eval()
+		seed = parent().par.Seed.val
 		self.stream.touchdiffusion_update_noise(seed=seed)
 
 	
@@ -238,15 +235,13 @@ class TouchDiffusionExt:
 				self.update_cfg_setting()
 			elif par.name == 'Seed':
 				self.update_noise()
-		if par.name == 'Enginelist':
-			self.update_selected_engine()
 	
 	def parexec_onPulse(self, par):
 		if par.name == 'Loadengine':
 			self.activate_stream()
 		elif par.name == 'Refreshenginelist':
 			self.update_engines()
-		elif par.name[0:3] == 'Url':
+		if par.name[0:3] == 'Url':
 			self.about(par.name)
 	
 	def fifolog(self, status, message):
