@@ -27,7 +27,7 @@ You can follow [YouTube tutorial](https://youtu.be/3WqUrWfCX1A)
 2. Install [Git](https://git-scm.com/downloads)
 3. Install [CUDA Toolkit](https://developer.nvidia.com/cuda-11-8-0-download-archive) 11.8 (required PC restart)
 4. Download [TouchDiffusion](https://github.com/olegchomp/TouchDiffusion/archive/refs/heads/main.zip).
-5. Open ```webui.bat``` with text editor and set path to Python 3.11 in ```set PYTHON_PATH=```. (ex. ```set PYTHON_PATH="C:\Program Files\Python311"```)
+5. Open ```webui.bat``` with text editor and set path to Python 3.11 in ```set PYTHON_PATH=```. (ex. ```set PYTHON_PATH="C:\Program Files\Python311\python.exe"```)
 6. Run ```webui.bat```. After installation it will provide url to web interface (ex. ```http://127.0.0.1:7860```)
 7. Open ```install & update``` tab and run ```Update dependencies```. (could take ~10 minutes, depending on your internet connection)
 8. If you get pop up window with error related to .dll, run ```Fix pop up```
