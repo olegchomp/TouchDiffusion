@@ -36,7 +36,7 @@ Required TouchDesigner 2023 & Python 3.11
 
 #### Portable:
 Includes preinstalled configurations, ensuring everything is readily available for immediate use.
-1. Download and extract archive
+1. Download and extract [archive](https://boosty.to/vjschool/posts/39931cd6-b9c5-4c27-93ff-d7a09b0918c5?share=post_link)
 2. Run ```webui.bat```. It will provide url to web interface (ex. ```http://127.0.0.1:7860```)
 3. Open ```install & update``` tab and run ```Update dependencies```.
 
