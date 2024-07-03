@@ -18,11 +18,11 @@ TouchDesigner implementation for real-time Stable Diffusion interactive generati
 **Notice:** This repository is in an early testing phase and may undergo significant changes. Use it at your own risk. 
 
 ## Usage
-You can install **manually** or with **portable** version.
-
-You can follow [YouTube tutorial](https://youtu.be/3WqUrWfCX1A)
+You can install **[manually](https://github.com/olegchomp/TouchDiffusion/blob/main/README.md#install)** or with **[portable](https://github.com/olegchomp/TouchDiffusion/blob/main/README.md#portable)** version.
 
 #### Install:
+You can follow [YouTube tutorial](https://youtu.be/3WqUrWfCX1A)
+
 Required TouchDesigner 2023 & Python 3.11
 1. Install [Python 3.11](https://www.python.org/downloads/release/python-3118/)
 2. Install [Git](https://git-scm.com/downloads)
