@@ -68,6 +68,15 @@ if not exist .venv (
         pause
         exit /b 1
     )
+    
+    if not exist StreamDiffusion (
+        echo Downloading StreamDiffusion...
+        git clone https://github.com/olegchomp/StreamDiffusion || (
+            echo Failed to download StreamDiffusion
+            pause
+            exit /b 1
+        )
+    )
 
     cd StreamDiffusion
     
