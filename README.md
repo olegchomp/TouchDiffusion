@@ -18,11 +18,12 @@ TouchDesigner implementation for real-time Stable Diffusion interactive generati
 **Notice:** This repository is in an early testing phase and may undergo significant changes. Use it at your own risk. 
 
 ## Usage
-Required TouchDesigner 2023 & Python 3.11
+You can install **manually** or with **portable** version.
 
 You can follow [YouTube tutorial](https://youtu.be/3WqUrWfCX1A)
 
 #### Install:
+Required TouchDesigner 2023 & Python 3.11
 1. Install [Python 3.11](https://www.python.org/downloads/release/python-3118/)
 2. Install [Git](https://git-scm.com/downloads)
 3. Install [CUDA Toolkit](https://developer.nvidia.com/cuda-11-8-0-download-archive) 11.8 (required PC restart)
@@ -32,6 +33,12 @@ You can follow [YouTube tutorial](https://youtu.be/3WqUrWfCX1A)
 7. Open ```install & update``` tab and run ```Update dependencies```. (could take ~10 minutes, depending on your internet connection)
 8. If you get pop up window with error related to .dll, run ```Fix pop up```
 9. Restart webui.bat
+
+#### Portable:
+Includes preinstalled configurations, ensuring everything is readily available for immediate use.
+1. Download and extract archive
+2. Run ```webui.bat```. It will provide url to web interface (ex. ```http://127.0.0.1:7860```)
+3. Open ```install & update``` tab and run ```Update dependencies```.
 
 #### Accelerate model:
 Models in ```.safetensors``` format must be in ```models\checkpoints``` folder. (as for sd_turbo, it  will be auto-downloaded).
