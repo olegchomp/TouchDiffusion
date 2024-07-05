@@ -21,9 +21,9 @@ TouchDesigner implementation for real-time Stable Diffusion interactive generati
 > [!TIP]
 > **TouchDiffusion can be installed in multiple ways.**
 > 
-> **[Portable](https://github.com/olegchomp/TouchDiffusion/blob/main/README.md#portable)** - includes preinstalled configurations, ensuring everything is readily available for immediate use.
+> **[Portable](https://github.com/olegchomp/TouchDiffusion/tree/main?tab=readme-ov-file#portable-version)** - includes preinstalled configurations, ensuring everything is readily available for immediate use.
 > 
-> **[Manuall install](https://github.com/olegchomp/TouchDiffusion/blob/main/README.md#install)** - step by step install instruction. 
+> **[Manuall install](https://github.com/olegchomp/TouchDiffusion/tree/main?tab=readme-ov-file#manuall-install)** - step by step install instruction. 
 
 #### Manuall install:
 You can follow [YouTube tutorial](https://youtu.be/3WqUrWfCX1A)
