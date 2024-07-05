@@ -18,9 +18,14 @@ TouchDesigner implementation for real-time Stable Diffusion interactive generati
 **Notice:** This repository is in an early testing phase and may undergo significant changes. Use it at your own risk. 
 
 ## Usage
-You can install **[manually](https://github.com/olegchomp/TouchDiffusion/blob/main/README.md#install)** or with **[portable](https://github.com/olegchomp/TouchDiffusion/blob/main/README.md#portable)** version.
+> [!TIP]
+> **TouchDiffusion can be installed in multiple ways.**
+> 
+> **[Portable](https://github.com/olegchomp/TouchDiffusion/blob/main/README.md#portable)** - includes preinstalled configurations, ensuring everything is readily available for immediate use.
+> 
+> **[Manuall install](https://github.com/olegchomp/TouchDiffusion/blob/main/README.md#install)** - step by step install instruction. 
 
-#### Install:
+#### Manuall install:
 You can follow [YouTube tutorial](https://youtu.be/3WqUrWfCX1A)
 
 Required TouchDesigner 2023 & Python 3.11
@@ -34,7 +39,7 @@ Required TouchDesigner 2023 & Python 3.11
 8. If you get pop up window with error related to .dll, run ```Fix pop up```
 9. Restart webui.bat
 
-#### Portable:
+#### Portable version:
 Includes preinstalled configurations, ensuring everything is readily available for immediate use.
 1. Download and extract [archive](https://boosty.to/vjschool/posts/39931cd6-b9c5-4c27-93ff-d7a09b0918c5?share=post_link)
 2. Run ```webui.bat```. It will provide url to web interface (ex. ```http://127.0.0.1:7860```)
