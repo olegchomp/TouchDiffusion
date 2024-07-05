@@ -19,12 +19,14 @@ TouchDesigner implementation for real-time Stable Diffusion interactive generati
 
 ## Usage
 > [!TIP]
-> **TouchDiffusion can be installed in multiple ways.**
-> 
-> **[Portable](https://github.com/olegchomp/TouchDiffusion/tree/main?tab=readme-ov-file#portable-version)** - includes preinstalled configurations, ensuring everything is readily available for immediate use.
-> 
-> **[Manuall install](https://github.com/olegchomp/TouchDiffusion/tree/main?tab=readme-ov-file#manuall-install)** - step by step install instruction. 
+> TouchDiffusion can be installed in multiple ways. **Portable version** have prebuild dendencies, so it prefered way to install or **Manuall install** is step by step instruction.
 
+#### Portable version:
+Includes preinstalled configurations, ensuring everything is readily available for immediate use.
+1. Download and extract [archive](https://boosty.to/vjschool/posts/39931cd6-b9c5-4c27-93ff-d7a09b0918c5?share=post_link)
+2. Run ```webui.bat```. It will provide url to web interface (ex. ```http://127.0.0.1:7860```)
+3. Open ```install & update``` tab and run ```Update dependencies```.
+   
 #### Manuall install:
 You can follow [YouTube tutorial](https://youtu.be/3WqUrWfCX1A)
 
@@ -38,12 +40,6 @@ Required TouchDesigner 2023 & Python 3.11
 7. Open ```install & update``` tab and run ```Update dependencies```. (could take ~10 minutes, depending on your internet connection)
 8. If you get pop up window with error related to .dll, run ```Fix pop up```
 9. Restart webui.bat
-
-#### Portable version:
-Includes preinstalled configurations, ensuring everything is readily available for immediate use.
-1. Download and extract [archive](https://boosty.to/vjschool/posts/39931cd6-b9c5-4c27-93ff-d7a09b0918c5?share=post_link)
-2. Run ```webui.bat```. It will provide url to web interface (ex. ```http://127.0.0.1:7860```)
-3. Open ```install & update``` tab and run ```Update dependencies```.
 
 #### Accelerate model:
 Models in ```.safetensors``` format must be in ```models\checkpoints``` folder. (as for sd_turbo, it  will be auto-downloaded).
