@@ -61,12 +61,12 @@ Models in ```.safetensors``` format must be in ```models\checkpoints``` folder. 
 5. Connect animated TOP to input. Component cook only if input updates. 
 
 #### Known issues / Roadmap:
-- [ ] Fix Re-init. Sometimes required to restart TouchDesigner for initializing site-packages.
+- [x] Fix Re-init. Sometimes required to restart TouchDesigner for initializing site-packages.
 - [ ] Code clean-up and rework.
 - [x] Custom resolution (for now fixed 512x512)
 - [ ] CFG not affecting image
 - [ ] Add Lora
-- [ ] Add Hyper Lora support
+- [x] Add Hyper Lora support
 - [ ] Add ControlNet support
 - [ ] Add SDXL support
 
